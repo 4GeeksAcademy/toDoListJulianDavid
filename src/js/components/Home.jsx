@@ -20,12 +20,17 @@ const Home = () => {
 			setTasks([...tasks, createTask.trim()])
 		}
 	}
-
-	    let deleteTask = (index) =>{
-        setTasks(tasks.filter((item, i)=> index != i ))
-    }
-
-
+	const deleteTask =(index) =>{
+		setTasks(tasks.filter((item, i) => index != i))
+	}
+	const Tarea = (  {descripcion, onDelete}) =>{
+    	const [isHover, setIsHover] = useState(false)
+    	return (
+                <p onMouseEnter={() => setIsHover(true)  } onMouseLeave={() => setIsHover(false)} >{descripcion}
+                {isHover && <button className="btn btn-danger text-white" onClick={onDelete}  > X </button>}
+                </p>
+            	)
+	}
 
 	return (
 		<div className="card text-center mt-5">
@@ -38,7 +43,7 @@ const Home = () => {
 				</div>
 				
 				{tasks.map((tarea, index) => {
-					return <p key={index}> {tarea} </p>
+					return (<Tarea key={index} descripcion={tarea} onDelete={() => deleteTask(index)} />)
 					})
 				}
 			</div>
