@@ -1,25 +1,32 @@
 import React from "react";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 
 
 const Home = () => {
 
-	const [tasks, setTasks] = useState([
-		"Estudiar",
-		"Trabajar",
-		"Descasar",
-		"Orar"
-	])
+	const apiUrl = "https://playground.4geeks.com/todo/users/julian"
+
+	const [tasks, setTasks] = useState([])
 
 	const [createTask, setCreateTask] = useState("");
 
+	const onLoad = () => {
+		fetch(apiUrl).then(response =>{
+			return response.json()
+		}).then(datos => {
+			setTasks(datos.todos)
+		})
+	}
+
+	useEffect(onLoad, []) 
+
 	let addTask = (tecla) => {
 		if (tecla === "Enter") {
-				if (createTask ===""){
-					return;
-				}
+			if (createTask === "") {
+				return;
+			}
 			setTasks([...tasks, createTask.trim()])
 			setCreateTask("")
 		}
@@ -48,7 +55,7 @@ const Home = () => {
 				</div>
 
 				{tasks.map((tarea, index) => {
-					return (<Tarea key={index} descripcion={tarea} onDelete={() => deleteTask(index)} />)
+					return (<Tarea key={index} descripcion={tarea.label} onDelete={() => deleteTask(index)} />)
 				})
 				}
 			</div>
